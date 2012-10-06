@@ -1,0 +1,3 @@
+{application,paxy}.
+{packages,[]}.
+{modules,[order,paxy_app,paxy_sup]}.
