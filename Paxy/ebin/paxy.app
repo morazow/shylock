@@ -3,6 +3,7 @@
               {vsn,"1"},
               {registered,[]},
               {applications,[kernel,stdlib]},
-              {mod,{paxy_app,[]}},
+              {mod,{paxy,[]}},
               {env,[]},
-              {modules,[paxy_app,paxy_sup]}]}.
+              {modules,[acceptor,comm,order,paxy,paxy_app,paxy_sup,pers,
+                        proposer]}]}.

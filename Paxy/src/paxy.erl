@@ -1,5 +1,5 @@
 -module(paxy).
--export(start/1,stop/0, stop/1).
+-export([start/1,stop/0, stop/1]).
 
 
 start(Seed) ->

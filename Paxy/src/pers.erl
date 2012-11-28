@@ -20,4 +20,3 @@ store(Name, Pr, Vt, Ac, Pn)->
 delete(Name) ->                  
     dets:delete(Name, perm),
     dets:close(Name).
-\end{verbatim}

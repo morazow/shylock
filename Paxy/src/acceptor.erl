@@ -1,5 +1,6 @@
 -module(acceptor).
--export(start/1).
+-export([start/1]).
+-include("macros.hrl").
 
 %% @doc Spawn the init/1 function
 %% Spawns:
@@ -29,22 +30,32 @@ acceptor(Name, Promise, Voted, Accepted) ->
         {prepare, Proposer, Round} ->
             case order:gr(Round, Promise) of
                 true -> % Able to make the promise
-                    Proposer ! {promise, Round, Voted, Accepted},
-                    acceptor(Name, Round, Voted, Accepted)
+                    comm:send(Proposer,{promise, Round, Voted, Accepted}),
+                    acceptor(Name, Round, Voted, Accepted);
                 false -> % Already promised in higher ballot
                 %% @TODO OPT: not answer
                 %% @TODO HELP: send also the promise
-                    Proposer ! {sorry, Round},
+                    comm:send(Proposer,{sorry, Round}),
                     acceptor(Name, Promise, Voted, Accepted)
             end;
         % Round 2
         {accept, Proposer, Round, Proposal} ->
-            case order:gr(Round, Promise) of
+            case order:goe(Round, Promise) of
                 true -> % Accept is valid
-                   Proposer ! {vote,}, %%Unfinished
-
-
-
-end.
+                    comm:send(Proposer,{vote,Round}), %%Unfinished
+                    %% @TODO v2: Here the learner should be triggered
+                    case order:goe(Round, Voted) of
+                        true ->
+                            acceptor(Name, Promise, Round, Proposal);
+                        false ->
+                            acceptor(Name, Promise, Voted, Accepted)
+                    end;
+                false ->
+                    comm:send(Proposer,{sorry,Round}),
+                    acceptor(Name, Promise, Voted, Accepted)
+            end;
+        stop ->
+            ok
+    end.
 
 
