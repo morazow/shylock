@@ -1,9 +1,0 @@
-{application,paxy,
-             [{description,[]},
-              {vsn,"1"},
-              {registered,[]},
-              {applications,[kernel,stdlib]},
-              {mod,{paxy,[]}},
-              {env,[]},
-              {modules,[acceptor,comm,etsq,order,paxy,paxy_app,paxy_sup,pers,
-                        proposer]}]}.

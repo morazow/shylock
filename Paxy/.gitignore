@@ -1,0 +1,11 @@
+deps
+priv
+logs
+ebin/*.beam
+*.o
+*~
+*.beam
+.eunit
+rel/paxos/
+rel/files/
+rel/erl_crash.dump
