@@ -46,7 +46,7 @@ round(Name, Backoff, Round, Proposal, Acceptors) ->
     case ballot(Round, Proposal, Acceptors, Name) of
         {ok,Decision} -> % A majority quorum agreed to accept
             io:format("~w decided ~w  in round ~w~n",[Name,Decision,Round]),
-            {ok,Decision}; %%Unfinished
+            {ok,Decision};
         abort -> % No majority due to timeout 
             timer:sleep(random:uniform(Backoff)),
             Next = order:inc(Round),
