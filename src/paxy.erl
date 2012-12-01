@@ -3,8 +3,10 @@
 %%% @copyright see LICENSE.txt 
 %%% --------------------------------------------------------------------
 -module(paxy).
--export([start/1,stop/0, stop/1]).
+-export([start/0, start/1,stop/0, stop/1]).
 
+start() ->
+    ok.
 
 start(Seed) ->
     register(a, acceptor:start(a)),

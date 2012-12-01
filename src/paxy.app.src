@@ -7,6 +7,6 @@
                   kernel,
                   stdlib
                  ]},
-  {mod, { paxy, []}},
+  {mod, { paxy_app, []}},
   {env, []}
  ]}.

@@ -5,4 +5,5 @@
 -module(learner).
 -export([start/0]).
 
-start()
+start() ->
+    ok.
