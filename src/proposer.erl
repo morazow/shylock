@@ -1,11 +1,16 @@
+%%% --------------------------------------------------------------------
+%%% @author Manos Dimogerontakis, Johan Montelius
+%%% @copyright see LICENSE.txt 
 %%% @doc 3 main parameters:
-%% <ul>
-%% <li><emph>timeoutpre</emph>: max milliseconds to wait for accept messages</li>
-%% <li><emph>timeoutpre</emph>: max milliseconds to wait for vote messages</li>
-%% <li><emph>backoff</emph>: increasing number of milliseconds between
-%%     rounds</li>
-%% <li><emph>delay</emph>: introduce delay to the system</li>
-%% </ul>
+%%% <ul>
+%%% <li><emph>timeoutpre</emph>: max milliseconds to wait for accept messages</li>
+%%% <li><emph>timeoutpre</emph>: max milliseconds to wait for vote messages</li>
+%%% <li><emph>backoff</emph>: increasing number of milliseconds between
+%%%     rounds</li>
+%%% <li><emph>delay</emph>: introduce delay to the system</li>
+%%% </ul>
+%%% @end
+%%% --------------------------------------------------------------------
 -module(proposer).
 -export([start/4]).
 -include("macros.hrl").

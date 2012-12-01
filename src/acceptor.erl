@@ -1,3 +1,7 @@
+%%% --------------------------------------------------------------------
+%%% @author Manos Dimogerontakis, Johan Montelius
+%%% @copyright see LICENSE.txt 
+%%% --------------------------------------------------------------------
 -module(acceptor).
 -export([start/1]).
 -include("macros.hrl").

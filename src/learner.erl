@@ -2,14 +2,7 @@
 %%% @author Manos Dimogerontakis
 %%% @copyright see LICENSE.txt 
 %%% --------------------------------------------------------------------
--module(comm).
--export([mcast/2,send/2]).
--include("macros.hrl").
+-module(learner).
+-export([start/0]).
 
-mcast(Msg, Dests) ->
-    lists:map(fun(Dest) -> send (Dest,Msg) end, Dests).
-
-send(Name, Message) ->
-    Name ! Message.
-
-    
+start()

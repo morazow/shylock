@@ -1,4 +1,9 @@
-%%% @DOC handles an named ets table as a FIFO queue
+%%% --------------------------------------------------------------------
+%%% @author Manos Dimogerontakis, Johan Montelius
+%%% @copyright see LICENSE.txt 
+%%% @doc handles an named ets ordered_set table as a FIFO queue
+%%% @end
+%%% --------------------------------------------------------------------
 -module(etsq).
 -export([init/1,push/2,pop/1]).
 

@@ -1,3 +1,10 @@
+%%% --------------------------------------------------------------------
+%%% @author Johan Montelius
+%%% @copyright see LICENSE.txt 
+%%% @doc Compare sequence numbers of the type {Number,ID}
+%%% @end
+%%% --------------------------------------------------------------------
+
 -module(order).
 -export([null/0, null/1, gr/2, goe/2, inc/1]).
 
@@ -7,7 +14,7 @@ null() ->
 null(Id) ->
     {0, Id}.
 
-%% compare sequence numbers: greater?
+%% @doc compare sequence numbers: greater?
 gr({N1,I1}, {N2,I2}) ->
     if 
         N1 > N2 ->
@@ -18,7 +25,7 @@ gr({N1,I1}, {N2,I2}) ->
             false
     end.
 
-%% compare sequence numbers: greater or equal?
+%%  @doc compare sequence numbers: greater or equal?
 goe({N1,I1}, {N2,I2}) ->
     if 
         N1 > N2 ->
@@ -29,6 +36,6 @@ goe({N1,I1}, {N2,I2}) ->
             false
     end.
 
-%% increase sequence number
+%% @doc increase sequence number
 inc({N, Id}) ->
     {N+1, Id}.
