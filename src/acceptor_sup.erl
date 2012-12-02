@@ -10,7 +10,7 @@
 -behaviour(supervisor).
 
 %% API
--export([start_link/0]).
+-export([start_link/1]).
 
 %% Supervisor callbacks
 -export([init/1]).
@@ -28,8 +28,8 @@
 %% @spec start_link() -> {ok, Pid} | ignore | {error, Error}
 %% @end
 %%--------------------------------------------------------------------
-start_link() ->
-    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+start_link(Start) ->
+    supervisor:start_link({local, ?SERVER}, ?MODULE, [Start]).
 
 %%%===================================================================
 %%% Supervisor callbacks
@@ -48,7 +48,7 @@ start_link() ->
 %%                     {error, Reason}
 %% @end
 %%--------------------------------------------------------------------
-init([]) ->
+init(Start) ->
     RestartStrategy = one_for_one,
     MaxRestarts = 1000,
     MaxSecondsBetweenRestarts = 3600,
@@ -60,7 +60,7 @@ init([]) ->
     Type = worker,
 
     % CHECK: do we need names?
-    Acceptor = {acceptor, {acceptor, start, []},
+    Acceptor = {acceptor, {acceptor, start, [Start]},
 	      Restart, Shutdown, Type, [acceptor]},
 
     {ok, {SupFlags, [Acceptor]}}.

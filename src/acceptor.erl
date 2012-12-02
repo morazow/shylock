@@ -3,17 +3,21 @@
 %%% @copyright see LICENSE.txt 
 %%% --------------------------------------------------------------------
 -module(acceptor).
--export([start/0]).
+-export([start/1]).
 -include("macros.hrl").
 
 %% @doc Spawn the init/1 function
 %% Spawns:
 %% @see init/4
-start() ->
-    Pid = spawn(fun() -> init(a) end),
-    % send this Pid to everyone
-    [spawn(fun() -> rpc:call(list_to_atom(Node), paxy, register_acceptor, [Pid]) end) || Node <- ?NODES],
-    {ok, self()}.
+start(Start) ->
+    case Start of 
+        start ->
+            register(acceptor, spawn(fun() -> init(a) end)),
+            % send this Pid to everyone
+            %[spawn(fun() -> rpc:call(list_to_atom(Node), paxy, register_acceptor, [Pid]) end) || Node <- ?NODES],
+            {ok, self()};
+        reboot ->
+            reboot.
 
 %% @doc Call the main acceptor loop
 %% Calls:

@@ -24,18 +24,23 @@
 %% @doc Spawn the init/4 function
 %% Spawns:
 %% @see init/4
-start(Name, Proposal, Acceptors, Seed) ->
-    spawn(fun() -> init(Name, Proposal, Acceptors, Seed) end).
+start(Start) ->
+     register(proposer, spawn(fun() -> init(Start) end)),
+     {ok, self()}.
     
 %% @doc Call the main proposer loop
 %% Calls:
 %% @see round/5
-init(Name, Proposal, Acceptors, Seed) ->
+init(Start) ->
     %% @TODO v4: acceptors should change dynamically
     %%       v1a: proposal is the incoming message    
-    random:seed(Seed, Seed, Seed),
-    Round = order:null(Name),
-    round(Name, ?backoff, Round, Proposal, Acceptors).
+    case Start of 
+        start ->
+            random:seed(now()),
+            Round = order:null(node()),
+            round(?backoff, Round, null).
+        reboot ->
+            ok.
 
 %% @doc A whole round where:
 %% <ul>
@@ -47,15 +52,30 @@ init(Name, Proposal, Acceptors, Seed) ->
 %% <emph>Round</emph>: (RoundNumber,Name)
 %% Calls:
 %% @see ballot/4
-round(Name, Backoff, Round, Proposal, Acceptors) ->
-    case ballot(Round, Proposal, Acceptors, Name) of
+round(Backoff, Round, Proposal) ->
+    case Proposal == null of
+        true ->
+            NewProposal = getProposal();
+        false ->
+            NewProposal = Proposal
+    end,
+    case ballot(Round, NewProposal) of
         {ok,Decision} -> % A majority quorum agreed to accept
-            io:format("~w decided ~w  in round ~w~n",[Name,Decision,Round]),
-            {ok,Decision};
+            io:format("Proposer ~w decided ~w  in round ~w~n",[node(),Decision,Round]),
+            case Decision == NewProposal of
+                true ->
+                    %nmcast(,learner), % @TODO Learner
+                    {Slot, _} = Round,
+                    send(?ASSIGNOR,{decided, Slot, Decision}),
+                    round(Backoff, order:inc(Round), null);
+                false ->
+                    Next = order:inc(Round),
+                    round(Backoff,Next,NewProposal)
+            end;
         abort -> % No majority due to timeout 
             timer:sleep(random:uniform(Backoff)),
-            Next = order:inc(Round),
-            round(Name,(2*Backoff),Next,Proposal,Acceptors)
+            %Next = order:inc(Round), % No need in multi paxos to increase the round
+            round((2*Backoff),Round,Proposal)
     end.
 
 
@@ -66,10 +86,10 @@ round(Name, Backoff, Round, Proposal, Acceptors) ->
 %% @see prepare/2
 %% @see collect/4
 %% @see vote/2
-ballot(Round, Proposal, Acceptors, Name) ->
-    io:format("~w [Proposer ~w] Phase 1~n",[now(),Name]),
-    prepare(Round, Acceptors),
-    Quorum = (length(Acceptors) div 2) + 1,
+ballot(Round, Proposal) ->
+    io:format("~w [Proposer ~w] Phase 1~n",[now(),node()]),
+    prepare(Round),
+    Quorum = (length(?NODES) div 2) + 1,
     % @ TODO OPT: if i can save which is the quorum i can
     %             ask send then accepts msgs only to them
     Max = order:null(),
@@ -77,11 +97,11 @@ ballot(Round, Proposal, Acceptors, Name) ->
         {accepted,Value} -> % IN V3 I WOULD THE LEADER, MOVE TO PHASE 2
             % @TODO v4: Acceptors/quorum number may be changed
             %          everytime phase two is run
-            io:format("~w [Proposer ~w] Phase 1 Majority! Value: ~w~n",[now(), Name,Value]),
-            accept(Round, Value, Acceptors),
+            io:format("~w [Proposer ~w] Phase 1 Majority! Value: ~w~n",[now(), node(),Value]),
+            accept(Round, Value),
             case vote(Quorum, Round) of
                 ok ->
-                    io:format("~w [Proposer ~w] Phase 2 Majority! Value: ~w~n",[now(), Name,Value]),
+                    io:format("~w [Proposer ~w] Phase 2 Majority! Value: ~w~n",[now(), node(),Value]),
                     {ok,Value};
                 abort ->
                     abort
@@ -153,18 +173,18 @@ vote(N, Round) ->
     end.
 
 
-prepare(Round, Acceptors) -> 
+prepare(Round) -> 
     %% @TODO v2 Here it should be sth else, i.e. an erlang
     %%       reference, as we will assume stable names
     %%       for the proposers and the communication will
     %%       happen through different nodes
-    comm:mcast({prepare,self(),Round},Acceptors).
+    comm:mcast({prepare,self(),Round},acceptor).
 
 
-accept(Round, Proposal, Acceptors) ->
+accept(Round, Proposal) ->
     %% @TODO v2 Here it should be sth else, i.e. an erlang
     %%       reference, as we will assume stable names
     %%       for the proposers and the communication will
     %%       happen through different nodes
-    comm:mcast({accept,self(),Round,Proposal}, Acceptors).
+    comm:mcast({accept,self(),Round,Proposal}, acceptor).
 

@@ -10,7 +10,10 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    paxy_sup:start_link().
+    paxy_sup:start_link(start).
+
+reboot(_StartType, _StartArgs) ->
+    paxy_sup:start_link(reboot).
 
 stop(_State) ->
     ok.
