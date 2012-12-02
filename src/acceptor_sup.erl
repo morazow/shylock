@@ -60,7 +60,7 @@ init(Start) ->
     Type = worker,
 
     % CHECK: do we need names?
-    Acceptor = {acceptor, {acceptor, start, [Start]},
+    Acceptor = {acceptor, {acceptor, start, Start},
 	      Restart, Shutdown, Type, [acceptor]},
 
     {ok, {SupFlags, [Acceptor]}}.

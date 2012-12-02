@@ -10,7 +10,7 @@
 -export([init/1]).
 
 %% Helper macro for declaring children of supervisor
--define(CHILD(I, Type, Arg), {I, {I, start_link, [Arg]}, permanent, 5000, Type, [I]}).
+-define(CHILD(I, Type, Start), {I, {I, start_link, Start}, permanent, 5000, Type, [I]}).
 
 %% ===================================================================
 %% API functions
@@ -25,9 +25,9 @@ start_link(Start) ->
 
 init(Start) ->
     %Paxy        = ?CHILD(paxy, worker,Start),
-    AcceptorSup = ?CHILD(acceptor_sup, supervisor,Start),
-    Receiver    = ?CHILD(receiver, worker, Start),
-    Proposer    = ?CHILD(proposer, worker, Start),
+    AcceptorSup = ?CHILD(acceptor_sup, supervisor, Start),
+    %Receiver    = ?CHILD(receiver, worker),
+    %Proposer    = ?CHILD(proposer, worker, Start),
     %Acceptor    = ?CHILD(acceptor, worker),
-    {ok, { {one_for_one, 5, 10}, [AcceptorSup, Receiver, Proposer]} }.
+    {ok, { {one_for_one, 5, 10}, [AcceptorSup]} }.
 

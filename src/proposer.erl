@@ -12,7 +12,7 @@
 %%% @end
 %%% --------------------------------------------------------------------
 -module(proposer).
--export([start/1]).
+-export([start_link/1]).
 -include("macros.hrl").
 
 
@@ -20,6 +20,8 @@
 -define(timeoutvote , 2000).
 -define(backoff , 10).
 -define(delay , 20).
+
+
 
 getProposal() ->
     %% get value from etsq
@@ -30,7 +32,7 @@ getProposal() ->
 %% @doc Spawn the init/4 function
 %% Spawns:
 %% @see init/4
-start(Start) ->
+start_link(Start) ->
      register(proposer, spawn(fun() -> init(Start) end)),
      {ok, self()}.
     
