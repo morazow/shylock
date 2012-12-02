@@ -14,4 +14,4 @@
 		'paxos@130.237.20.136', 'paxos@130.237.20.137',
 		'paxos@130.237.20.138']).
 
--define(ASSIGNOR, {ass,'paxos@130.237.20.139').
+-define(ASSIGNOR, {ass,'paxos@130.237.20.139'}).

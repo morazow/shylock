@@ -17,7 +17,8 @@ start(Start) ->
             %[spawn(fun() -> rpc:call(list_to_atom(Node), paxy, register_acceptor, [Pid]) end) || Node <- ?NODES],
             {ok, self()};
         reboot ->
-            reboot.
+            reboot
+    end.
 
 %% @doc Call the main acceptor loop
 %% Calls:

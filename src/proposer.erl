@@ -12,7 +12,7 @@
 %%% @end
 %%% --------------------------------------------------------------------
 -module(proposer).
--export([start/4]).
+-export([start/1]).
 -include("macros.hrl").
 
 
@@ -20,6 +20,12 @@
 -define(timeoutvote , 2000).
 -define(backoff , 10).
 -define(delay , 20).
+
+getProposal() ->
+    %% get value from etsq
+    %%null.
+    etsq:pop(clients).
+
 
 %% @doc Spawn the init/4 function
 %% Spawns:
@@ -38,9 +44,10 @@ init(Start) ->
         start ->
             random:seed(now()),
             Round = order:null(node()),
-            round(?backoff, Round, null).
+            round(?backoff, Round, null);
         reboot ->
-            ok.
+            ok
+    end.
 
 %% @doc A whole round where:
 %% <ul>
@@ -53,10 +60,16 @@ init(Start) ->
 %% Calls:
 %% @see ballot/4
 round(Backoff, Round, Proposal) ->
-    case Proposal == null of
-        true ->
-            NewProposal = getProposal();
-        false ->
+    case Proposal of
+        null ->
+            case getProposal() of
+                -1 -> 
+                    NewProposal = null,
+                    round(Backoff, Round, null);
+                NewProposal ->
+                    NewProposal
+            end;
+        _ ->
             NewProposal = Proposal
     end,
     case ballot(Round, NewProposal) of
@@ -66,7 +79,7 @@ round(Backoff, Round, Proposal) ->
                 true ->
                     %nmcast(,learner), % @TODO Learner
                     {Slot, _} = Round,
-                    send(?ASSIGNOR,{decided, Slot, Decision}),
+                    comm:send(?ASSIGNOR,{decided, Slot, Decision}),
                     round(Backoff, order:inc(Round), null);
                 false ->
                     Next = order:inc(Round),
