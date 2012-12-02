@@ -10,7 +10,11 @@
 %% Spawns:
 %% @see init/4
 start(Name) ->
-    spawn(fun() ->  init(Name) end).
+    Pid = spawn(fun() -> init(Name) end),
+    % send this Pid to everyone
+    [spawn(fun() ->
+		   rpc:call(list_to_atom(Node), paxy, register_acceptor, [Pid])
+	   end) || Node <- ?NODES].
 
 %% @doc Call the main acceptor loop
 %% Calls:

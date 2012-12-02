@@ -1,36 +1,77 @@
-%%% --------------------------------------------------------------------
-%%% @author Johan Montelius
-%%% @copyright see LICENSE.txt 
-%%% --------------------------------------------------------------------
+%%%-------------------------------------------------------------------
+%%% @author manos, morazow
+%%% @copyright (C) 2012,
+%%% @doc
+%%% Paxy server, keeps global view of acceptors
+%%% @end
+%%%-------------------------------------------------------------------
 -module(paxy).
--export([start/0, start/1,stop/0, stop/1]).
 
-start() ->
-    ok.
+-behaviour(gen_server).
 
-start(Seed) ->
-    register(a, acceptor:start(a)),
-    register(b, acceptor:start(b)),
-    register(c, acceptor:start(c)),
-    register(d, acceptor:start(d)),
-    register(e, acceptor:start(e)),
-    Acceptors = [a,b,c,d,e],
-    proposer:start(kurtz, green, Acceptors, Seed+1),
-    proposer:start(willard, red, Acceptors, Seed+2),
-    proposer:start(kilgore, blue, Acceptors, Seed+3),
-    true.
+-include("macros.hrl").
+
+%% API
+-export([start_link/0, stop/0]).
+-export([register_acceptor/1, get_acceptors/0]).
+
+%% gen_server callbacks
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2,
+	 terminate/2, code_change/3]).
+
+-define(SERVER, ?MODULE). 
+
+-record(state, {acceptors = undefined}).
+
+%%%===================================================================
+%%% API
+%%%===================================================================
+
+start_link() ->
+    gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+
+register_acceptor(Pid) ->
+    gen_server:call(?SERVER, {register_acceptor, Pid}).
+
+get_acceptors() ->
+    gen_server:call(?SERVER, get_acceptors).
 
 stop() ->
-    stop(a),
-    stop(b),
-    stop(c),
-    stop(d),
-    stop(e).
+    gen_server:call(?SERVER, stop).
 
-stop(Name) ->
-    case whereis(Name) of
-        defined ->
-            ok;
-        Pid ->
-            Pid ! stop
-    end.
+%%%===================================================================
+%%% gen_server callbacks
+%%%===================================================================
+
+init([]) ->
+    % connect to other Paxies
+    [spawn(fun() -> net_adm:ping(list_to_atom(Node)) end) || Node <- ?NODES],
+    State = #state{acceptors = []},
+    {ok, State}.
+
+handle_call({register_acceptor, Pid}, _From, State) ->
+    Reply = ok,
+    {reply, Reply, handle_register_acceptors(Pid, State)};
+
+handle_call(get_acceptors, _From, State) ->
+    Reply = State#state.acceptors,
+    {reply, Reply, State}.
+
+handle_cast(stop, State) ->
+    {stop, normal, State}.
+
+
+handle_info(_Info, State) ->
+    {noreply, State}.
+terminate(_Reason, _State) ->
+    ok.
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+%%%===================================================================
+%%% Internal functions
+%%%===================================================================
+handle_register_acceptors(Pid, #state{acceptors=[Rest]}=State) ->
+    NewAcc   = [Pid | Rest],
+    NewState = State#state{acceptors = NewAcc},
+    NewState.
