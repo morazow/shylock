@@ -44,6 +44,7 @@ stop() ->
 %%%===================================================================
 
 init([]) ->
+    process_flag(trap_exit, true),
     % connect to other Paxies
     [spawn(fun() -> net_adm:ping(list_to_atom(Node)) end) || Node <- ?NODES],
     State = #state{acceptors = []},

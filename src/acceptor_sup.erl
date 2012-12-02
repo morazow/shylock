@@ -60,7 +60,7 @@ init([]) ->
     Type = worker,
 
     % CHECK: do we need names?
-    Acceptor = {acceptor, {acceptor, start, ['Name']},
+    Acceptor = {acceptor, {acceptor, start, []},
 	      Restart, Shutdown, Type, [acceptor]},
 
     {ok, {SupFlags, [Acceptor]}}.
