@@ -10,6 +10,7 @@
 %% Spawns:
 %% @see init/4
 start(Start) ->
+    io:format("acceptor: ~w~n",[Start]),
     case Start of 
         start ->
             register(acceptor, spawn(fun() -> init(a) end)),
