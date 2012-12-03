@@ -5,7 +5,7 @@
 %%% assigner.
 %%% @end
 %%% --------------------------------------------------------------------
--module(testc).
+-module(assclient).
 -export([start/1]).
 
 -define(delay, 10000).
