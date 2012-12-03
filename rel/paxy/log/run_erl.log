@@ -1,8 +1,0 @@
-run_erl [2761] Mon Dec  3 02:25:24 2012
-Args before exec of shell:
-run_erl [2761] Mon Dec  3 02:25:24 2012
-argv[0] = sh
-run_erl [2761] Mon Dec  3 02:25:24 2012
-argv[1] = -c
-run_erl [2761] Mon Dec  3 02:25:24 2012
-argv[2] = exec /home/manos/Apps/paxy/rel/paxy/bin/paxy console \'\' 
