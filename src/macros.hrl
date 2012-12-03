@@ -11,12 +11,12 @@
 -endif.
 
 -ifndef(NODES).
--define(NODES, ['paxos@130.237.20.134', 'paxos@130.237.20.135',
-		'paxos@130.237.20.136', 'paxos@130.237.20.137',
-		'paxos@130.237.20.138']).
+-define(NODES, ['paxy@130.237.20.134', 'paxy@130.237.20.135',
+		'paxy@130.237.20.136', 'paxy@130.237.20.137',
+		'paxy@130.237.20.138']).
 -endif.
 
 -ifndef(ASSIGNOR).
--define(ASSIGNOR, {ass,'paxos@130.237.20.139'}).
+-define(ASSIGNOR, {ass,'paxy@130.237.20.139'}).
 -endif.
 
