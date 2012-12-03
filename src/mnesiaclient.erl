@@ -14,8 +14,8 @@ start() ->
 
 loop() ->
     receive
-        {init, Bool} ->
-            mnesiaq:init(Bool);
+        {init, Start, Node} ->
+            mnesiaq:init(Start, Node);
         {add, Slot, PID} ->
             mnesiaq:add(Slot,PID);
         {read, Slot} ->
