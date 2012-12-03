@@ -52,10 +52,12 @@ handle_call({release_lock, ClientPid}, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
-handle_info(Info, State) ->
-    io:format("got fucking a message ~w~n", [Info]),
-    gen_server:call(?SERVER, Info),
-    {noreply, State}.
+handle_info({acquire_lock, Pid}, State) ->
+    io:format("got fucking a message ~w~n", [Pid]),
+    {noreply, handle_acquire(Pid, State)};
+handle_info({release_lock, Pid}, State) ->
+    io:format("got fucking a message ~w~n", [Pid]),
+    {noreply, handle_release(Pid, State)}.
 
 terminate(_Reason, _State) ->
     ok.
