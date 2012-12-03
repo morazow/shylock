@@ -37,6 +37,7 @@ release_lock(ClientPid) ->
 %%%===================================================================
 
 init([]) ->
+    io:format("starting receiver ~n"),
     {ok, #state{clients = etsq:init(clients)}}.
 
 handle_call({acquire_lock, ClientPid}, _From, State) ->

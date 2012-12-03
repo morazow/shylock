@@ -2,10 +2,10 @@
 %%% @author manos, morazow
 %%% @copyright (C) 2012,
 %%% @doc
-%%% Supervisor for acceptors
+%%% Supervisor for proposers
 %%% @end
 %%%-------------------------------------------------------------------
--module(acceptor_sup).
+-module(proposer_sup).
 
 -behaviour(supervisor).
 
@@ -48,10 +48,9 @@ start_link(Start) ->
 %%                     {error, Reason}
 %% @end
 %%--------------------------------------------------------------------
-init(Start) ->
-    % CHECK: do we need names?
-    Acceptor = {acceptor, {acceptor, start, Start}, ?RESTART, ?SHUTDOWN, ?TYPE, [acceptor]},
-    {ok, {?SUPFLAGS, [Acceptor]}}.
+init(Start) ->    
+    Proposer = {proposer, {proposer, start, Start}, ?RESTART, ?SHUTDOWN, ?TYPE, [proposer]},
+    {ok, {?SUPFLAGS, [Proposer]}}.
 
 %%%===================================================================
 %%% Internal functions

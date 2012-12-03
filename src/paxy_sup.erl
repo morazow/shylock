@@ -9,9 +9,7 @@
 %% Supervisor callbacks
 -export([init/1]).
 
-
 %% Helper macro for declaring children of supervisor
-%-define(CHILD(I, Tspe, Start), {I, {I, start_link, Start}, permanent, 5000, Type, [I]}).
 -include("sup.hrl").
 
 %% ===================================================================
@@ -26,10 +24,10 @@ start_link(Start) ->
 %% ===================================================================
 
 init(Start) ->
-    %Paxy        = ?CHILD(paxy, worker,Start),
-    AcceptorSup = ?CHILD(acceptor_sup, supervisor, Start),
-    %Receiver    = ?CHILD(receiver, worker),
-    %Proposer    = ?CHILD(proposer, worker, Start),
-    %Acceptor    = ?CHILD(acceptor, worker),
-    {ok, { {one_for_one, 5, 10}, [AcceptorSup]} }.
+    Receiver    = {receiver, {receiver, start_link, []},?RESTART, ?SHUTDOWN, ?TYPE, [receiver]},
+    AcceptorSup = ?CHILD(acceptor_sup, supervisor, Start),  
+    ProposerSup = ?CHILD(proposer_sup, supervisor, Start),
+    %LearnerSup  = ?CHILD(learner_sup, supervisor, Start),
+    
+    {ok, { {one_for_one, 5, 10}, [Receiver, AcceptorSup, ProposerSup]} }.
 

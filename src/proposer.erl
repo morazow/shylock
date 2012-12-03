@@ -12,27 +12,19 @@
 %%% @end
 %%% --------------------------------------------------------------------
 -module(proposer).
--export([start_link/1]).
+-export([start/1]).
 -include("macros.hrl").
-
 
 -define(timeoutprep , 2000).
 -define(timeoutvote , 2000).
 -define(backoff , 10).
 -define(delay , 20).
 
-
-
-getProposal() ->
-    %% get value from etsq
-    %%null.
-    etsq:pop(clients).
-
-
 %% @doc Spawn the init/4 function
 %% Spawns:
 %% @see init/4
-start_link(Start) ->
+start(Start) ->
+     io:format("proposer: ~w~n",[Start]),
      register(proposer, spawn(fun() -> init(Start) end)),
      {ok, self()}.
     
@@ -186,6 +178,12 @@ vote(N, Round) ->
     after ?timeoutvote ->
             abort
     end.
+
+
+getProposal() ->
+    %% get value from etsq
+    %%null.
+    etsq:pop(clients).
 
 
 prepare(Round) -> 
