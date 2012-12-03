@@ -52,7 +52,8 @@ handle_call({release_lock, ClientPid}, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
-handle_info(_Info, State) ->
+handle_info(Info, State) ->
+    io:format("got fucking a message~n"),
     {noreply, State}.
 
 terminate(_Reason, _State) ->
