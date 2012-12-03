@@ -4,12 +4,12 @@
 %%% --------------------------------------------------------------------
 -module(learner).
 -export([start/1]).
--import('macros.hrl').
+-include("macros.hrl").
 
 
 start(Start) ->
     register(learner,spawn(fun() -> init(Start) end )),
-    {ok,self()};
+    {ok,self()}.
 
 init(start) ->
     mnesiaq:init(start, null),

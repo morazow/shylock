@@ -15,10 +15,13 @@ init(start, _) -> %%% At the first run
     mnesia:create_table(slotqueue, [{type,ordered_set},{disc_copies,[node()]},{attributes,record_info(fields,slotqueue)}]);
 init(reboot, Nodes) ->
     mnesia:start(),
-    mnesia:wait_for_tables(slotqueue,1000),
+    mnesia:wait_for_tables(slotqueue,500),
+    io:format("Reached here~n"),
+    timer:sleep(500),
     LocalMax = mnesia:dirty_last(slotqueue),
+    io:format("Reached here~n"),
     {Max,MaxNode} = findDMax(Nodes),
-    whereis(proposer) ! {max_slot, Max},
+    %whereis(proposer) ! {max_slot, Max},
     io:format("MaxNode: ~w  Max: ~w~n",[MaxNode,Max]),
     io:format("LocalMax: ~w~n",[LocalMax]),
     MatchHead = #slotqueue{slot='$1',pid ='$2'},

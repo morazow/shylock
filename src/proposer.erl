@@ -40,7 +40,10 @@ init(Start) ->
             Round = order:null(node()),
             round(?backoff, Round, null);
         reboot ->
-            ok
+            receive
+                {max_slot,Max} ->
+                    round(?backoff, {Max,self()}, null)
+            end
     end.
 
 %% @doc A whole round where:
@@ -72,7 +75,7 @@ round(Backoff, Round, Proposal) ->
             case Decision == NewProposal of
                 true ->
                     {Slot, _} = Round,
-                    nmcast({decided,Slot,Decision},learner),
+                    comm:nmcast({decided,Slot,Decision},learner),
                     %comm:send(?ASSIGNOR,{decided, Slot, Decision}), % From learner now
                     round(Backoff, order:inc(Round), null);
                 false ->
