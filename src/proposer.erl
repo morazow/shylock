@@ -59,6 +59,7 @@ init(Start) ->
 round(Backoff, Round, Proposal) ->
     case Proposal of
         null ->
+            io:format("null proposal~n"),
             case getProposal() of
                 -1 -> 
                     NewProposal = null,

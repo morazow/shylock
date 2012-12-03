@@ -28,6 +28,7 @@ pop(Name) ->% send -1 in case of fail to pop
                 pop(Name);
             Key ->
             [{_,Result}] = ets:lookup(Name, Key),
+            io:format("Table:  ~w   Key:  ~w  Client: ~w~n",[Name,Key,Result]),
             ets:delete(Name,Key),
             Result
     end.
