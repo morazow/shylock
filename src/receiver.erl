@@ -53,7 +53,7 @@ handle_cast(_Msg, State) ->
     {noreply, State}.
 
 handle_info(Info, State) ->
-    io:format("got fucking a message~n"),
+    io:format("got fucking a message ~w~n", [Info]),
     {noreply, State}.
 
 terminate(_Reason, _State) ->
