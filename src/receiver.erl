@@ -54,6 +54,7 @@ handle_cast(_Msg, State) ->
 
 handle_info(Info, State) ->
     io:format("got fucking a message ~w~n", [Info]),
+    gen_server:call(?SERVER, Info),
     {noreply, State}.
 
 terminate(_Reason, _State) ->
