@@ -42,6 +42,7 @@ init([]) ->
     {ok, #state{}}.
 
 handle_call({acquire_lock, ClientPid}, _From, State) ->
+    io:format("received message ~n"),
     Reply = ok,
     {reply, Reply, handle_acquire(ClientPid, State)};
 handle_call({release_lock, ClientPid}, _From, State) ->
