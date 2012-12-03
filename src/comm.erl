@@ -11,6 +11,7 @@ mcast(Msg, Dests) ->
 
 
 nmcast(Msg, Process) ->
+    %Nodes = lists:map(fun(A) -> {Process,A} end, ?NODES),
     lists:map(fun(Dest) -> send ({Process,Dest},Msg) end, ?NODES).
 
 

@@ -1,5 +1,5 @@
 %%% --------------------------------------------------------------------
-%%% @author Manos Dimogerontakis, Johan Montelius
+%%% @author Manos Dimogerontakis, Muhammet Orazov, Johan Montelius
 %%% @copyright see LICENSE.txt 
 %%% --------------------------------------------------------------------
 -module(acceptor).
@@ -16,7 +16,8 @@ start(Start) ->
             register(acceptor, spawn(fun() -> init(a) end)),
             % send this Pid to everyone
             %[spawn(fun() -> rpc:call(list_to_atom(Node), paxy, register_acceptor, [Pid]) end) || Node <- ?NODES],
-            {ok, self()};
+            {ok, self()}; % Instead of self() we can put whereis(acceptor) and
+                          % supervise the spawned function
         reboot ->
             reboot
     end.

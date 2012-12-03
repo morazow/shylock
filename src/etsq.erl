@@ -1,5 +1,5 @@
 %%% --------------------------------------------------------------------
-%%% @author Manos Dimogerontakis, Johan Montelius
+%%% @author Manos Dimogerontakis, Muhammet Orazow
 %%% @copyright see LICENSE.txt 
 %%% @doc handles an named ets ordered_set table as a FIFO queue
 %%% @end

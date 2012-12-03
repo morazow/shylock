@@ -1,5 +1,5 @@
 %%% --------------------------------------------------------------------
-%%% @author Manos Dimogerontakis, Johan Montelius
+%%% @author Manos Dimogerontakis, Muhammet Orazov, Johan Montelius
 %%% @copyright see LICENSE.txt 
 %%% @doc 3 main parameters:
 %%% <ul>
@@ -79,9 +79,9 @@ round(Backoff, Round, Proposal) ->
             io:format("Proposer ~w decided ~w  in round ~w~n",[node(),Decision,Round]),
             case Decision == NewProposal of
                 true ->
-                    %nmcast(,learner), % @TODO Learner
                     {Slot, _} = Round,
-                    comm:send(?ASSIGNOR,{decided, Slot, Decision}),
+                    nmcast({decided,Slot,Decision},learner),
+                    %comm:send(?ASSIGNOR,{decided, Slot, Decision}), % From learner now
                     round(Backoff, order:inc(Round), null);
                 false ->
                     Next = order:inc(Round),
@@ -193,7 +193,7 @@ prepare(Round) ->
     %%       reference, as we will assume stable names
     %%       for the proposers and the communication will
     %%       happen through different nodes
-    comm:nmcast({prepare,self(),Round},acceptor).
+    comm:nmcast({prepare, {proposer,node()}, Round}, acceptor).
 
 
 accept(Round, Proposal) ->
@@ -201,5 +201,5 @@ accept(Round, Proposal) ->
     %%       reference, as we will assume stable names
     %%       for the proposers and the communication will
     %%       happen through different nodes
-    comm:nmcast({accept,self(),Round,Proposal}, acceptor).
+    comm:nmcast({accept,{proposer,node()},Round,Proposal}, acceptor).
 
