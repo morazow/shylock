@@ -193,7 +193,7 @@ prepare(Round) ->
     %%       reference, as we will assume stable names
     %%       for the proposers and the communication will
     %%       happen through different nodes
-    comm:mcast({prepare,self(),Round},acceptor).
+    comm:nmcast({prepare,self(),Round},acceptor).
 
 
 accept(Round, Proposal) ->
@@ -201,5 +201,5 @@ accept(Round, Proposal) ->
     %%       reference, as we will assume stable names
     %%       for the proposers and the communication will
     %%       happen through different nodes
-    comm:mcast({accept,self(),Round,Proposal}, acceptor).
+    comm:nmcast({accept,self(),Round,Proposal}, acceptor).
 

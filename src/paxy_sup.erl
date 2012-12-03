@@ -10,9 +10,9 @@
 -export([init/1]).
 
 
--define(SERVER, ?MODULE).
 %% Helper macro for declaring children of supervisor
--define(CHILD(I, Type, Start), {I, {I, start_link, Start}, permanent, 5000, Type, [I]}).
+%-define(CHILD(I, Tspe, Start), {I, {I, start_link, Start}, permanent, 5000, Type, [I]}).
+-include("sup.hrl").
 
 %% ===================================================================
 %% API functions

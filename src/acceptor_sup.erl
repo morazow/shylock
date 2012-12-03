@@ -15,7 +15,7 @@
 %% Supervisor callbacks
 -export([init/1]).
 
--define(SERVER, ?MODULE).
+-include("sup.hrl").
 
 %%%===================================================================
 %%% API functions
@@ -49,19 +49,9 @@ start_link(Start) ->
 %% @end
 %%--------------------------------------------------------------------
 init(Start) ->
-    io:format("acceptor_sup: ~w~n",[Start]),
-    RestartStrategy = one_for_one,
-    MaxRestarts = 1000,
-    MaxSecondsBetweenRestarts = 3600,
-    SupFlags = {RestartStrategy, MaxRestarts, MaxSecondsBetweenRestarts},
-    Restart = permanent,
-    Shutdown = 2000,
-    Type = worker,
-    io:format("acceptor_sup: Going to fork acceptor~n"),
     % CHECK: do we need names?
-    Acceptor = {acceptor, {acceptor, start, Start},Restart, Shutdown, Type, [acceptor]},
-    io:format("acceptor_sup: Forked acceptor~n"),
-    {ok, {SupFlags, [Acceptor]}}.
+    Acceptor = {acceptor, {acceptor, start, Start},?RESTART, ?SHUTDOWN, ?TYPE, [acceptor]},
+    {ok, {?SUPFLAGS, [Acceptor]}}.
 
 %%%===================================================================
 %%% Internal functions
