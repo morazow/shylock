@@ -17,7 +17,7 @@
 
 -define(SERVER, ?MODULE). 
 
--record(state, {clients}).
+-record(state, {Name = undefined}).
 
 %%%===================================================================
 %%% API
@@ -38,7 +38,8 @@ release_lock(ClientPid) ->
 
 init([]) ->
     io:format("starting receiver ~n"),
-    {ok, #state{clients = etsq:init(clients)}}.
+    etsq:init(clients),
+    {ok, #state{Name = clients)}}.
 
 handle_call({acquire_lock, ClientPid}, _From, State) ->
     Reply = ok,
@@ -62,14 +63,14 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
-handle_acquire(Pid, #state{clients=C} = State) ->
+handle_acquire(Pid, State) ->
     % add Pid to state
     % start paxos?
-    etsq:push(C, Pid),
-    State#state{clients=C}.
+    etsq:push(State#state.Name, Pid),
+    State.
 
-handle_release(_Pid, #state{clients=C} = State) ->
+handle_release(_Pid, State) ->
     % forward release to assigner
-    etsq:pop(C), % I did not get how pop, works here
+    etsq:pop(State#state.Name), % I did not get how pop, works here
                       % not sure whether we should pop here or in assigner
-    State#state{clients=C}.
+    State.
