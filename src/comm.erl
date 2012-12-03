@@ -3,7 +3,7 @@
 %%% @copyright see LICENSE.txt 
 %%% --------------------------------------------------------------------
 -module(comm).
--export([mcast/2,send/2]).
+-export([nmcast/2,send/2,mcast/2]).
 -include("macros.hrl").
 
 mcast(Msg, Dests) ->
