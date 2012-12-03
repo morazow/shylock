@@ -67,7 +67,6 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 handle_acquire(Pid, State) ->
     % add Pid to state
-    % start paxos?
     etsq:push(clients, Pid),
     State.
 
