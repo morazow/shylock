@@ -11,7 +11,7 @@
 
 
 init(Name) ->
-    ets:new(Name,[ordered_set,named_table]).
+    ets:new(Name,[ordered_set,public,named_table]).
 
 push(Name, Value) ->
     case ets:last(Name) of
