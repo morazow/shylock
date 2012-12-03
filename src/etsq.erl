@@ -24,7 +24,8 @@ push(Name, Value) ->
 pop(Name) ->% send -1 in case of fail to pop
     case ets:first(Name) of
             ?eot ->
-                -1;
+		timer:sleep(100),
+                pop(Name);
             Key ->
             [{_,Result}] = ets:lookup(Name, Key),
             ets:delete(Name,Key),
