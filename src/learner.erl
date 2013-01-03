@@ -13,6 +13,7 @@ start(Start) ->
 
 init(start) ->
     mnesiaq:init(start, null),
+    io:format("Learner: Initiated Mnesia~n"),
     loop();
 init(reboot) ->
     Nodes = lists:delete(node(),?NODES),
@@ -20,9 +21,12 @@ init(reboot) ->
     loop().
 
 loop() ->
+    io:format("Learner: Initiated Loop~n"),
     receive
         {decided, Slot, Pid} ->
+            io:format("Learner: Got decision for slot  ~w Client ~w~n",[Slot,Pid]),
             spawn(fun() ->  mnesiaq:add(Slot,Pid) end),
             comm:send(?ASSIGNOR,{decided,Slot,Pid}),
-            loop()
-    end.
+            io:format("Learner: Sent decision to assignor~n")
+    end,
+    loop().
