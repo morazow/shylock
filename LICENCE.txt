@@ -1,4 +1,4 @@
-copyright © 2012 Emmanouil Dimogerontaks and Muhammet Orazow. All Rights Reserved.
+copyright © 2012 Emmanouil Dimogerontaks and Muhammet Orazov. All Rights Reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
