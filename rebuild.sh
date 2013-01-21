@@ -1,11 +1,11 @@
 #!/bin/sh
 
-rel/paxy/bin/paxy stop
-rm -rf rel/paxy
+rel/Shylock/bin/Shylock stop
+rm -rf rel/Shylock
 
-git pull origin Paxyv3
+git pull origin master
 ./rebar get-deps
 ./rebar compile
 
 ./rebar generate
-rel/paxy/bin/paxy console
+rel/Shylock/bin/Shylock console
