@@ -1,12 +1,13 @@
-{application, paxy,
+{application, shylock,
  [
   {description, ""},
   {vsn, "1"},
   {registered, []},
   {applications, [
                   kernel,
-                  stdlib
+                  stdlib,
+                  sasl
                  ]},
-  {mod, { paxy_app, []}},
+  {mod, { shylock_app, []}},
   {env, []}
  ]}.

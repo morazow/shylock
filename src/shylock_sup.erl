@@ -1,5 +1,5 @@
 
--module(paxy_sup).
+-module(shylock_sup).
 
 -behaviour(supervisor).
 

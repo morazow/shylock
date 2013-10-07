@@ -1,0 +1,12 @@
+{application,shylock,
+             [{description,[]},
+              {vsn,"1"},
+              {registered,[]},
+              {applications,[kernel,stdlib,sasl]},
+              {mod,{shylock_app,[]}},
+              {env,[]},
+              {modules,[acceptor,acceptor_sup,assclient,assignor,comm,etsq,
+                        learner,learner_sup,lock_server,lock_server_queue,
+                        mnesiaclient,mnesiaq,order,paxy,paxy_old,pers,
+                        proposer,proposer_sup,receiver,shylock_app,
+                        shylock_sup]}]}.

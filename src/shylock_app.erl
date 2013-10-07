@@ -1,4 +1,4 @@
--module(paxy_app).
+-module(shylock_app).
 
 -behaviour(application).
 
@@ -10,10 +10,10 @@
 %% ===================================================================
 
 start(_StartType, _StartArgs) ->
-    paxy_sup:start_link(start).
+    shylock_sup:start_link(start).
 
 reboot(_StartType, _StartArgs) ->
-    paxy_sup:start_link(reboot).
+    shylock_sup:start_link(reboot).
 
 stop(_State) ->
     ok.
